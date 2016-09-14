@@ -1,5 +1,5 @@
 ﻿# Collect Host Names
-Foreach ($device in get-content Z:\hostname.txt) {
+Foreach ($device in get-content #HOSTNAMES#.txt) {
 
 # Allow RPC Connection
 Function UpdateRPC ([string]$hostname) {
@@ -56,9 +56,9 @@ foreach ($d in $device)
     UpdateRPC $d
     Get-Software $d
         $dataTable = Get-Software $d | out-DataTable
-        $connectionString = "Data Source=WDSQL01; Integrated Security=True;Initial Catalog=ShortermDB;"
+        $connectionString = "Data Source=#SERVER#; Integrated Security=True;Initial Catalog=#INSTANCE#;"
         $bulkCopy = new-object ("Data.SqlClient.SqlBulkCopy") $connectionString
-        $bulkCopy.DestinationTableName = "dev.SoftAudit"
+        $bulkCopy.DestinationTableName = "#DATABASE#"
         $bulkCopy.WriteToServer($dataTable)
     }
 
